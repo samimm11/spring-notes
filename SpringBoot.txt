@@ -1,0 +1,413 @@
+Annotations:
+@SpringBootApplication - It is an interface.It contains many annotations.@SpringBootConfiguration,@EnableAutoConfiguration ,@ComponentScan
+@Component - Object will be created by Spring Container.It should be mentioned above only in class.
+@ComponentScan - It will scan the main package and sub package.It allows to create the object.Eligible for the class to create an object.
+@Autowired - telling the spring that im passing the object reference in the class.It is used to achieve loosely coupling and injecting the dependency.
+				If you are not mentioning Autowired,it will give null pointer exception.
+@Primary - To consider one of the beans.
+@Qualifier - Gives higher priority to the beans.It will be used only if Primary annotation have.
+
+Spring Container/IOC:
+It is responsible for creating object and stored in this container.
+It will store the created object.
+
+How to get the object from Spring Container?
+ConfigurableApplicationContext context = SpringApplication.run(Iteration1Application.class, args);
+context.getBean(GameRunner.class) - To get class object.
+
+BeanFactory:
+It will create an object when i call.
+
+ApplicationContext:
+Legal initialisation.
+It will create an object when SpringApplication.run .
+
+@Component("pacManGame")
+ 
+GameRunner{
+@Autowired
+@Qualifier("pacManGame")
+private GamingCOnsole game;
+}
+
+
+@primary & @Qualifier:
+@Primary - it tells spring,"when you find more than one beans that both can be autowired,please use the primary one as your first choose.
+@Qualifier- no matter how many beans have found.It will give priority.
+
+
+
+
+maven:
+remote repository , local repository - .m2-repository-jars
+
+Let's debug:
+
+application.properties:
+logging.level.org.springframework=debug
+
+Auto configuration jar:
+It will check the pom.xml file.
+main method will call the auto configuration jar.
+configuration jar will check with pom.xml file and it will select like for which one need to create objects otherwise it will neglect the object creation.
+
+Ctrl+shift+O -> It will automatically import package / remove unwanted package.
+
+Create new Project:
+Add dependency:
+Spring web
+
+JDK:
+JAX WS library(SOAP)
+JAX RS library (REST)
+
+Defaultly spring supports REST services.
+
+Add Spring web starter dependency to create web application with REST services.
+
+Layers in spring boot(Design Principle):
+Presentation layer 
+Controller layer / web layer
+Service layer
+Database layer
+Database
+
+@Component refers to Spring bean.It is stereotype annotation.Then only componentScan will be scanned and worked.
+@Autowired- Pick from container and stored in class.it is field level annotation.
+
+@controller: 
+	-Class level annotation.
+	-It is used to handling the HTTP requests and return appropriate responses.
+	-Spring 4.0 - Introduced RestController annotation.
+	
+@service:
+	-It is used in Service Class.
+	-It is used to call the DAO class.
+
+@Repository:
+	-It is used in DAO class.
+	
+@RequestMapping:
+	-Handler mapping will call the request mapping from the Dispatcher servlet.
+	
+@ResponseBody():
+	-It should be used in field level.
+	-Going to give response only if i give this annotation and the response should be comes from body.
+	-It should be define in body if u use controller annotation.If u use @RestController no need to use this ResponseBody annotation.
+	
+
+Positive matches will create the object and stored in Spring container.It will be decided by AutoC
+onfiguration jar
+
+@GetMapping:
+	-It comes in Spring 4.0
+	-It can be used instead of RestMapping.
+	-No need to specify method type GET and no need to add produces :application/json . because the RestController will defaulty give those.
+
+
+@PostMapping,@PUTMapping etc..
+
+fieldInjection,setter injection and constructor injection
+
+class A{
+
+@Autowired //field injection
+B b;
+
+@Autowired //constructor injection
+public A(B b, C c){
+this.b=b;
+this.c=c;
+
+@Autowired //setter injection
+public void setA(B b){
+this.b=b;
+}
+}
+
+class B{
+
+}
+
+maven build:
+project ->right click->run as -> maven build ->projectName->workspace->clean install (code)->apply->run
+
+run configuration->java application->project name->main method class->apply ->run
+
+MyFirstRestService -clone
+
+@Crossorigin :
+   -It will allow only have authorization. and mainly for security purpose.
+   
+ @GetMapping("/course/{id}/{abc}")
+public Course getCourseDetails(@pathVariable int id,@pathVariable(value="abc",required=false) String name){
+
+}
+@pathVariable:
+	-getting the constant variable from the path given by user.
+	-to obtain some placeholder from the URI.
+	
+required="false" means exceptional if required="true" means mandatory.Default required will be true.
+@GetMapping("/api")
+public ResponseEntity getUserById(RequestParam("id" Long id){
+.....
+}
+@RequestParam:
+	
+	-to obtain a paramter from the URI
+	
+@PostMapping:
+	-For creating data.
+	
+@RequestBody:
+	-Attaching the value in the body.
+	
+ResponseEntity:
+	-It will be used in Post mapping,Put mapping like that.
+	-It will return complete http respone.
+	-Include status code,headers and body
+	
+Post - Creates a resource.
+PUT - If the record exists,update else, create a new record.It replaces a resource.It updates and overwrite.
+PATCH - update and merge.
+GET - read
+Delete - delete record.
+
+Idompotent operations produce the same result even when the operation is repeated many times.The result of the 2nd,3rd , and 1,000th repeat of the operation will return exactly the same result as the 1st time.
+
+Idempotent:
+Delete - Yes
+PUT
+GET
+
+Non Idempotent:
+POST
+PATCH
+
+JDBC - low level API.
+Spring Data JPA - High Level API
+
+Spring Boot Starter Web - Rest api 
+Spring Boot starter JPA - Talk to database using JPA (There is no need to write queries)
+Spring Boot started JDBC - Talk to database using JDBC (we have to write queries) 
+Spring Boot Starter security-
+
+
+Spring Data JPA - Specification(equivalent to Interface),High Level API
+Hibernate-Hibernate will write the query for us.
+
+Install java and run jar file
+java -jar JAR_NAME.jar
+
+Alternate for Hibernate (Implementation):
+EclipseLink
+Nucleus
+
+Spring Boot Actuator:(Production ready features)
+
+	-Provides a number of endpoints.
+		-beans
+		-health
+		-metrics
+
+
+Spring Boot Devtools:
+-Increase developer productivity.
+_There is no need to restart the server whenever the code changes.
+
+H2 Database:
+	Database will be created when the server starts itself and it deleted when the server shuts.It is an caching memory.It's mainly for development and testing purpose.It boosts the development process.It is an in memory database.
+	
+	To override configurations:
+	application.properties
+	.yaml/yml
+	
+	@configuration
+	class ConfigurationClass{
+	
+	}
+	
+	In Properties file:
+	spring.jpa.database-platform=org.hibernate.dialect.H2Dialect  //Hibernate implementations.
+	
+	
+	In Exception:
+	@ResponseStatus(HTTPStatus.NOT_FOUND)
+	public class userException extends Exception{
+	
+	}
+	
+	@ControllerAdvice -Global Exception Handler
+	
+	@ExceptionHandler(com.uniq......UserNotFoundException.class)
+	
+	create ExceptionResponse POJO class and use it in Global Exception.
+	
+	
+	public class ExceptionResponse{
+	timeStamp,message,details
+	}
+	
+	Learn Spring validations :
+	@Valid
+	
+	@Size
+	
+	@Past
+	
+	
+	Ramesh sir Git respository:
+	Restwebservice_New code
+	
+	UserResources
+	UserDaoService
+	Exception
+	
+	
+	hateoas dependency:
+		-It provides href link.
+		
+	spring doc:
+		-Tp bring Swagger-ui into our projects.
+		
+	http:localhost:9090/h2-console //To connect h2 database
+	http:localhost:9090/swagger-ui/index.html //Swagger UI
+	http:localhost:9090/actuator -To check server health ,metrics
+	
+	clean install -DSkiptests
+	
+	Spring Data JPA:
+	JDBC API
+	Spring JDBC(Reduce boiler plate code and no need to handle Exception). classes like jdbcTemplate and Name
+	Hibernate (ORM Framework)--Query Language
+	JPA - Java Persistence API (Specifications -It acts like an Interface)
+	Spring Data JPA - It is an abstraction layer on top of the JPA.
+	
+	Database->JDBC->Hibernate->JPA->Spring Data JPA ->Application
+	
+	Hibernate:
+		-No need to write sql query with the help of hibernate query language.
+	
+	@Entity
+	@Table(name="product")
+	public class Product{
+	
+	@Id
+	@GeneratedValue
+	private int id;
+	
+	}
+	
+	public class HibernateExample{
+	main{
+	
+	
+	}
+	
+	Spring Data JPA:
+		-create a repository interface that extends JPARepository.
+		
+	}
+	
+	JPA Code:
+	Create EntityManagerFactory
+	Create Manager
+	
+	
+	class JPA {
+	
+	}
+	
+	Interface DataJpA{
+	
+	}
+	
+	Spring Data JPA:
+		-Entity class create.
+		-Repository Interface
+		-configuration
+
+@Entity	-	
+class Users{
+private Integer id;
+private String ;
+
+#setter and getter
+
+{
+
+@Repository - It will check the dependency
+interfacce UserRespository){
+
+}
+
+change the configuration in application.proper
+
+interfaces are Pagin And
+interface are JPA Repository
+
+interfacce (UserRespository extends JAPRepository<User>{
+
+}
+
+@Id ->It denots primary key.
+@GeneratedValue ->Auto increment of value.
+
+
+spring.jpa.show-sql=true -.To view the hibernate query in Console.
+spring.h2.console.enabled=true ->To view the database in browser.
+spring.datasource.url=jdbc:h2:mem:testdb;NON_KEYWORDS_USER
+spring.datasource.driverClassName=org.h2.Drive
+
+spring.jpa.defer-datasource-initialization = true ->Insert the values into the table without checking .
+
+Unit Test cases:
+Junit:
+	-Mainly for code coverage.
+	-Unit Testing framework.
+	-It tests runners to execute tests using annotations.
+	-Individual units of components are tested.
+TDD:Test Driven Development
+@Test:
+	-Denotes test case.
+	
+assertEquals(expectedValue,actualValue) ->Return type boolean.
+assertTrue(5>2)
+assertFalse
+assertNotNull
+assertNull
+
+@Before:
+	-This method will call before going to text case.
+	-In before method we can create objects.
+
+@After:
+	-After finishing text case, it will trigger.
+	
+@Ignore:
+	Ignore the test case method.
+	
+Spring-boot-starter-test provides JUnit.
+
+jackson4 library will be in Spring web,actuator,springdoc api.
+
+
+pom.xml:
+	Inside Scope tag ->Insert exclusions tag-> add junit dependency to exclude
+
+javabuild path ->add libraries->Add library->JUnit 5
+
+then right click ->JUnit Test
+
+Mockito:
+	-It is a mocking framework.
+	-Mocking object (dummy object).
+	-It allows to create and configure mock objects.
+	-It is an alternative for getting database connection(example).
+	
+Refer UniqTestCaseDemo from rameshCoderepository
+
+Dependency needed for Spring microservices:
+spring cloud configuration
+Eureka server
+	
