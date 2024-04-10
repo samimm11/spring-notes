@@ -285,6 +285,8 @@ H2 Database:
 	
 	Database->JDBC->Hibernate->JPA->Spring Data JPA ->Application
 	
+	spring data JPA >hibernate >session factory >sessionFactory.openSession() to create session object>session.beginTransaction() to create Transaction object > session.save ,commit for save method.
+	
 	Hibernate:
 		-No need to write sql query with the help of hibernate query language.
 	
@@ -337,7 +339,7 @@ private String ;
 {
 
 @Repository - It will check the dependency
-interfacce UserRespository){
+interface UserRespository){
 
 }
 
@@ -407,7 +409,188 @@ Mockito:
 	
 Refer UniqTestCaseDemo from rameshCoderepository
 
+Microservice:
 Dependency needed for Spring microservices:
 spring cloud configuration
 Eureka server
+
+@Table is used to denote the custom table.It is Entity class level annotation.
+
+@Column is used to denote the custom table column.
+GenerationType.Sequence will work only in Oracle not in MySQL.
+@GeneratedValue(strategy=GenerationType.AUTO):
+	-Choose the appropriate strategy based on the database.
 	
+@GeneratedValue(strategy=GenerationType.Identity):
+	-For MySQL database.
+	
+defer keyword - It is used to stop inserting values before creating table.
+
+Refer Spring data finder methods
+
+JPQL - Java Persistence Query Language.
+"select empName from employee"
+In which empName is an fieldName and employee is an class name. We should not use database table name and column name.
+
+@Query("select empName from employee",nativeQuery =true):
+	-It is used to write Custom Query.
+	-Defaultly nativeQuery will be false, but we should use database table name and column name.
+	-Query("select firstName from employee")
+	
+Hibernate Associations:
+
+@OneToOne
+@OneToMany
+@ManyToOne
+@ManyToMany
+
+OneToOne:
+
+class Post{
+
+ManyToOne(Many posts belongs to one user)
+private User user;
+
+}
+class User{
+
+
+}
+
+mappedBy or @joinColumn
+@JsonIgnore
+
+@GenericGenerator
+
+Refer SpringData_JPA associations,idgenerators,nativeQuery
+Refer documents in SpringDocuments
+
+
+@Configuration--Customizing third party beans
+In method level must use @Bean
+class AdminService{
+
+}
+@value
+
+@value("${propertiesFileKey}")
+private String portAddress;
+
+environment-local/dev/stage/prod
+@Profile
+
+
+in application.properties set profiles.active =prod
+application-dev.properties //configure your environment setup
+application-prod.properties
+Profiles-
+
+
+@PropertySource
+
+Spring security:
+
+spring security username is user (for authentication)
+JWT - authorization
+
+RestTemplate/HttpUrlConnection is used to connect from one service to another service.
+
+spring security started dependency
+JWT(json web token)
+session token / jsessionToken
+5 instances - 5 machines
+
+jwt is ussed to handle multiple instances(many ports) , session is used to manage only one instance.
+
+shared cache is used to have session information and it will deliver  to instances.
+
+stickiness : It is used, when the user hits and the request will be go to load balancer and then it goes to one instance and whenever if the user comes it will redirect to same instance.
+Loadbalancer:
+
+JWT: value token, which is maintained in client side.(RFC-7519 standard)
+session :reference token, which is maintained in server side.
+
+refer official site jwt-Decoded header,payload,verify signature.
+
+header :
+	It contains alogirthm and type.
+payload:
+	information to create token
+signature: 
+	-base64urlencoded algorithm 
+	
+Base64Url:
++ will be replaced by - 
+/ will be replaced by _
+= omitted
+
+create class WebSecurityConfig extends WebSecurityConfigurerAdapter
+
+override configure method
+
+@Configuration
+@EnableWebSecurity
+
+JwtRequestFilter extends OncePerRequestFilter
+
+override method doFilterInternal
+
+@CrossOrigin():
+	-Cross Origin Resource Sharing
+	-security concept that allows restricting the resources implemented in web browsers.
+	-prevents the javascript code against different origin.
+	-Using crossOrigin ("http:localhost:3000") to allow that is my consumer or use crossOrigin("*")
+	
+user->onceperRequestFilter->doFilter->
+
+refer rameshUniq /Spring_JWT repository
+
+
+To add jsp to our project and for configuration
+SpringBootServletInitializer
+override configure method 
+add Tomcat embed jasper ,spring boot starter tomcat add this two dependency manually because embedded tomcat server will not work.
+
+application.properties:
+spring.view.prefix:/WEB-INF/jsp/
+spring.view.suffix: .jsp
+
+@RequestBody  equals to @ModelAttribute for jsp.
+
+Difference between ModelAndView and RequestBody
+
+Log4j (library):
+	-go to pom.xml add spring boot started log4j2
+	-exclusion spring-boot-actuator-logging from ----
+	-go to resource folder add log4j.xml
+	-create MyService class in java.
+		private static final Logger logger = LogManager.getLogger(MyService.class)
+	-create folder logs->app-info.log,app-debug.log
+	
+Refer splunk server for log
+Refer putty server
+	
+Spring security:
+
+	create a User bean class extends UserDetails
+	create a UserRepository and create a method findByName()
+	create s service with class UserDetailsImp implements UserDetailsService and override loadUserByUserName(String username) throws UserNotFoundException
+	get jwt api from mvnrepository
+	get JJWT-Impl from mvnrepository
+	get JJWT-Jackson Extension
+	
+	token generation and validation:
+	 create a service package and create a service class JWTService to generate and validate token
+	 
+	 search 256 bit key generator to store key. eg asecuritykey
+	 
+	 create a filter package
+	 
+
+
+By default spring security users UserDetailsService
+
+if we want to use hard code username password use UserDetailsService to login.
+
+otherwise need Authentication Provider.
+for authentication provider we need authentication object  (username and password), this object will be verified by Authentication Provider .
